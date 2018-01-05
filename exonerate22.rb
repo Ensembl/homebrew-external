@@ -10,7 +10,6 @@ class Exonerate22 < Formula
 
   depends_on "pkg-config" => :build
   depends_on "glib"
-  conflicts_with 'homebrew/science/exonerate', :because => 'Both create the same binaries'
 
   def install
     # Fix the following error. This issue is fixed upstream in 2.4.0.

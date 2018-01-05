@@ -13,10 +13,10 @@ class Repeatmasker < Formula
   option "without-cache", "Do not change the cache directory to use REPEATMASKER_CACHE instead of HOME"
   option "with-dfam", "Use Hmmer and Dfam to mask sequences"
 
-  depends_on "homebrew/science/hmmer" # at least version 3.1 for nhmmer
+  depends_on "ensembl/external/hmmer" # at least version 3.1 for nhmmer
   depends_on "perl" => :optional
   depends_on "ensembl/external/rmblast"
-  depends_on "homebrew/science/trf"
+  depends_on "ensembl/external/trf"
   depends_on "ensembl/moonshine/phrap" => :recommended
   depends_on "ensembl/moonshine/repbase" => :recommended
 
@@ -30,8 +30,8 @@ class Repeatmasker < Formula
     inreplace libexec/"RepeatMaskerConfig.pm" do |f|
       f.gsub! /(RMBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
       f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "ncbi";'
-      f.gsub! /(TRF_PRGM\s*=)\s*\S+/, '\1 "'.concat(Formula['homebrew/science/trf'].opt_bin).concat('/trf";')
-      f.gsub! /(HMMER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula['homebrew/science/hmmer'].opt_bin).concat('";')
+      f.gsub! /(TRF_PRGM\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/trf'].opt_bin).concat('/trf";')
+      f.gsub! /(HMMER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/hmmer'].opt_bin).concat('";')
       f.gsub! "HOME", "REPEATMASKER_CACHE" if build.with? "cache"
       if build.with? "phrap"
         f.gsub! /(CROSSMATCH_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula["ensembl/moonshine/phrap"].opt_bin).concat('";')

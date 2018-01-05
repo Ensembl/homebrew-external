@@ -12,11 +12,11 @@ class Repeatmodeler < Formula
 
   option "without-configure", "Do not run configure"
 
-  depends_on "homebrew/science/recon"
+  depends_on "ensembl/external/recon"
   depends_on "ensembl/external/repeatmasker"
-  depends_on "homebrew/science/repeatscout"
+  depends_on "ensembl/external/repeatscout"
   depends_on "ensembl/external/rmblast"
-  depends_on "homebrew/science/trf"
+  depends_on "ensembl/external/trf"
 
   # Configure RepeatModeler. The prompts are:
   # PRESS ENTER TO CONTINUE
@@ -43,9 +43,9 @@ class Repeatmodeler < Formula
       #{perl}
       #{prefix}
       #{Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec"}
-      #{Formula["homebrew/science/recon"].opt_prefix/"bin"}
-      #{Formula["homebrew/science/repeatscout"].opt_prefix}
-      #{Formula["homebrew/science/trf"].opt_prefix/"bin"}
+      #{Formula["ensembl/external/recon"].opt_prefix/"bin"}
+      #{Formula["ensembl/external/repeatscout"].opt_prefix}
+      #{Formula["ensembl/external/trf"].opt_prefix/"bin"}
       1
       #{HOMEBREW_PREFIX}/bin
       Y

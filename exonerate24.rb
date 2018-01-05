@@ -10,7 +10,6 @@ class Exonerate24 < Formula
 
   depends_on "pkg-config" => :build
   depends_on "glib"
-  conflicts_with 'homebrew/science/exonerate', :because => 'Both create the same binaries'
   
   keg_only "Must be a keg because otherwise it will clash with exonerate 2.2"
 
