@@ -44,8 +44,8 @@ class Repeatmasker < Formula
     if build.with? "perl"
       perl = Formula["perl"].opt_bin/"perl"
     else
-      if ENV.has_key?('PLENV_ROOT')
-        perl = %x{#{ENV['PLENV_ROOT']}/bin/plenv which perl}.chomp
+      if ENV.has_key?('HOMEBREW_PLENV_ROOT')
+        perl = %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
       else
         perl = "/usr/bin/perl"
       end

@@ -33,8 +33,8 @@ class Repeatmodeler < Formula
     prefix.install Dir["*"]
     bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
 
-    perl = if ENV.has_key?('PLENV_ROOT')
-      %x{#{ENV['PLENV_ROOT']}/bin/plenv which perl}.chomp
+    perl = if ENV.has_key?('HOMEBREW_PLENV_ROOT')
+      %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
     else
       "/usr/bin/perl"
     end
