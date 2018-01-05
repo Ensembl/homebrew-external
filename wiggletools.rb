@@ -13,7 +13,7 @@ class Wiggletools < Formula
   depends_on "curl" unless OS.mac?
   depends_on "gsl"
   depends_on "htslib"
-  depends_on "libbigwig"
+  depends_on "ensembl/external/libbigwig"
 
   def install
     system "make"
