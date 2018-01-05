@@ -11,7 +11,7 @@ class Tophat < Formula
 
   bottle :disable, "needs to be rebuilt with latest boost"
 
-  depends_on "boost"
+  depends_on "ensembl/external/boost"
   depends_on "bowtie2"
   depends_on "ensembl/external/bowtie" => :optional
   depends_on :python if MacOS.version <= :snow_leopard
