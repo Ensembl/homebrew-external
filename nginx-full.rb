@@ -1,6 +1,9 @@
 class NginxFull < Formula
   desc "HTTP(S) server, reverse proxy, IMAP/POP3 proxy server"
   homepage "https://nginx.org/"
+  # tag origin homebrew-nginx
+  # tag derived
+
   url "https://nginx.org/download/nginx-1.10.3.tar.gz"
   sha256 "75020f1364cac459cb733c4e1caed2d00376e40ea05588fb8793076a4c69dd90"
   head "http://hg.nginx.org/nginx/", :using => :hg
