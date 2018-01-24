@@ -7,6 +7,7 @@ class Prank < Formula
   # tag derived
 
   depends_on "ensembl/external/biopp"
+  depends_on "ensembl/external/mafft"
   depends_on "ensembl/external/exonerate22"
 
   def install
