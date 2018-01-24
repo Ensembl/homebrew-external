@@ -32,17 +32,12 @@ class Graphviz238 < Formula
   # https://github.com/Homebrew/homebrew/issues/14566
   env :std
 
-  option :universal
-  option "with-pango", "Build with Pango/Cairo for alternate PDF output"
-
-  deprecated_option "with-x" => "with-x11"
-  deprecated_option "with-pangocairo" => "with-pango"
-
   depends_on "pkg-config" => :build
   depends_on "pango"
   depends_on "librsvg"
   depends_on "freetype"
   depends_on "libpng"
+  depends_on :x11
 
   fails_with :clang do
     build 318
