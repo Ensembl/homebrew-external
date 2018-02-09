@@ -30,7 +30,7 @@ class Augustus < Formula
     bin.install_symlink Dir[libexec/"bin/*"]
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Set the environment variable AUGUSTUS_CONFIG_PATH:
       export AUGUSTUS_CONFIG_PATH=#{opt_prefix}/libexec/config
     EOS

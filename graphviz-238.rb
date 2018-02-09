@@ -65,7 +65,7 @@ class Graphviz238 < Formula
   end
 
   test do
-    (testpath/"sample.dot").write <<-EOS.undent
+    (testpath/"sample.dot").write <<~EOS
     digraph G {
       a -> b
     }
