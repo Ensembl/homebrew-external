@@ -22,7 +22,7 @@ class BlastLegacy < Formula
   end
 
   def caveats
-    <<-EOS.undent
+    <<~EOS
     Tools 'rpsblast' and 'seedtop' were installed as 'rpsblast.legacy' and 'seedtop.legacy'
     to avoid conflicts with the BLAST+ executables.
     EOS

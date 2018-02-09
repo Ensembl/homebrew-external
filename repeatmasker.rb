@@ -67,7 +67,7 @@ class Repeatmasker < Formula
     system "#{HOMEBREW_PREFIX}/bin/makeblastdb -dbtype prot -in #{libexec}/Libraries/RepeatPeps.lib"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Congratulations!  RepeatMasker is now ready to use.
     If something went wrong you can reconfigure RepeatMasker
     with:

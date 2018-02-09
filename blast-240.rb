@@ -96,7 +96,7 @@ class Blast240 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Using the option "--with-static" will create static binaries instead of
     dynamic. The NCBI Blast static installation is approximately 7 times larger
     than the dynamic.

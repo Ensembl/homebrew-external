@@ -17,7 +17,7 @@ class Snap < Formula
     prefix.install %w[DNA HMM Zoe]
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       Set the ZOE environment variable:
         export ZOE=#{opt_prefix}
     EOS

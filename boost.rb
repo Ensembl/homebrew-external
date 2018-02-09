@@ -114,14 +114,14 @@ class Boost < Formula
     # ENV.compiler doesn't exist in caveats. Check library availability
     # instead.
     if Dir["#{lib}/libboost_log*"].empty?
-      s += <<-EOS.undent
+      s += <<~EOS
 
       Building of Boost.Log is disabled because it requires newer GCC or Clang.
       EOS
     end
 
     if Hardware::CPU.ppc? || Hardware::CPU.is_32_bit? || build.universal?
-      s += <<-EOS.undent
+      s += <<~EOS
 
       Building of Boost.Context and Boost.Coroutine is disabled as they are
       only supported on x86_64.
@@ -132,7 +132,7 @@ class Boost < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <boost/algorithm/string.hpp>
       #include <string>
       #include <vector>

@@ -38,7 +38,7 @@ class Repeatmodeler < Formula
     else
       "/usr/bin/perl"
     end
-    (prefix/"config.txt").write <<-EOS.undent
+    (prefix/"config.txt").write <<~EOS
 
       #{perl}
       #{prefix}
@@ -59,7 +59,7 @@ class Repeatmodeler < Formula
     end if build.with? "configure"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     To reconfigure RepeatModeler, run
       brew postinstall repeatmodeler
     or
