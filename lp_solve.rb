@@ -27,7 +27,7 @@ class LpSolve < Formula
   # tag origin homebrew-science
   # tag derived
 
-  depends_on :python => :optional
+  depends_on "python" => :optional
   depends_on NumpyHasHeaders.new if build.with? "python"
 
   resource "lp_solve_python" do

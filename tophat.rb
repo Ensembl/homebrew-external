@@ -14,7 +14,7 @@ class Tophat < Formula
   depends_on "ensembl/external/boost"
   depends_on "bowtie2"
   depends_on "ensembl/external/bowtie" => :optional
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
 
   patch :p0, :DATA
 
