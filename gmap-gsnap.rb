@@ -18,7 +18,7 @@ class GmapGsnap < Formula
     system "make", "install"
   end
 
-  def caveats; <<-EOF.undent
+  def caveats; <<~EOF
     You will need to either download or build indexed search databases.
     See the readme file for how to do this:
       http://research-pub.gene.com/gmap/src/README

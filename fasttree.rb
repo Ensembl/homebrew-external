@@ -16,7 +16,7 @@ class Fasttree < Formula
   end
 
   test do
-    (testpath/"test.fa").write <<-EOF.undent
+    (testpath/"test.fa").write <<~EOF
       >1
       LCLYTHIGRNIYYGSYLYSETWNTTTMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGTNLV
       >2

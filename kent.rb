@@ -80,7 +80,7 @@ class Kent < Formula
 
     kent_bash = (etc+'kent.bash')
     File.delete(kent_bash) if File.exist?(kent_bash)
-    (kent_bash).write <<-EOF.undent
+    (kent_bash).write <<~EOF
       export MACHTYPE=#{machtype}
       export KENT_SRC=#{prefix}
     EOF
@@ -88,7 +88,7 @@ class Kent < Formula
 
   
   test do
-    (testpath/"test.fa").write <<-EOF.undent
+    (testpath/"test.fa").write <<~EOF
       >test
       ACTG
     EOF

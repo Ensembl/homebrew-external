@@ -24,7 +24,7 @@ class Htslib131 < Formula
     pkgshare.install "test"
     htsbash = (etc+'htslib.bash')
     File.delete(htsbash) if File.exists?(htsbash)
-    (htsbash).write <<-EOF.undent
+    (htsbash).write <<~EOF
       HTSLIB_DIR=#{prefix}
     EOF
   end
