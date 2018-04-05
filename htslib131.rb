@@ -14,6 +14,7 @@ class Htslib131 < Formula
   depends_on "curl"
   depends_on 'libtool'
   depends_on 'autoconf'
+  depends_on "zlib" unless OS.mac?
   patch :DATA
 
   def install
