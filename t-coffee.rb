@@ -6,7 +6,7 @@ class TCoffee < Formula
   # doi "10.1006/jmbi.2000.4042"
   # tag origin homebrew-science
   # tag derived
-  revision 2
+  revision 3
 
   depends_on 'poa'
   depends_on 'dialign-tx'
@@ -20,6 +20,9 @@ class TCoffee < Formula
 
   def install
     cd 't_coffee_source' do
+      # Fix this error: MAX_N_PID exceded -- Recompile changing the value of MAX_N_PID (current: 260000 Requested: 263956)
+      inreplace "io_lib_header.h", "define MAX_N_PID       260000", "define MAX_N_PID       520000"
+      inreplace "define_header.h", "define MAX_N_PID       260000", "define MAX_N_PID       520000"
       system *%w[make t_coffee]
       bin.install 't_coffee'
       #prefix.install "lib" => "libexec"
