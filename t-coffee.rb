@@ -8,7 +8,7 @@ class TCoffee < Formula
   # tag derived
   revision 3
 
-  depends_on 'poa'
+  depends_on 'ensembl/external/poa'
   depends_on 'dialign-tx'
   depends_on 'dialign-t'
   depends_on 'pcma'
