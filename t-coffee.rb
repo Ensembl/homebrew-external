@@ -14,7 +14,7 @@ class TCoffee < Formula
   depends_on 'pcma'
   depends_on 'probcons'
   depends_on 'clustal-w'
-  depends_on 'mafft'
+  depends_on 'ensembl/external/mafft'
   depends_on 'muscle'
   depends_on 'kalign'
 
