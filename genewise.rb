@@ -35,6 +35,9 @@ class Genewise < Formula
     inreplace "src/models/phasemodel.c", "isnumber", "isdigit"
 
     inreplace "src/makefile", "csh welcome.csh", "sh welcome.csh"
+    
+    # Fix error: undefined reference to `g_hash_table_foreach_remove'
+    inreplace "src/models/makefile", "-ldyna_glib", "-ldyna_glib `pkg-config --libs glib-2.0`"
 
     cd("src") { system "make", "all" }
     bin.install Dir["src/bin/*"]
