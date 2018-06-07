@@ -11,6 +11,8 @@ class Genewise < Formula
 
   depends_on "pkg-config" => :build
   depends_on "glib"
+  depends_on "tcsh"
+  depends_on "binutils"
 
   fails_with :gcc => "4.8"
 
