@@ -15,6 +15,7 @@ class Genewise < Formula
   fails_with :gcc => "4.8"
 
   def install
+    ENV.deparallelize
     # Use pkg-config glib-2.0 rather than glib-config
     inreplace %w[src/makefile src/corba/makefile
                  src/dnaindex/assembly/makefile src/dnaindex/makefile
