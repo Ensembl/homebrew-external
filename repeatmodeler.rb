@@ -5,9 +5,9 @@ class Repeatmodeler < Formula
   # tag origin homebrew-science
   # tag derived
 
-  url "http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz"
-  version "1.0.8"
-  sha256 "3ac87af3fd3da0c9a2ca8e7b8885496abdf3383e413575548c1d234c15f27ecc"
+  url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-open-#{version}.tar.gz"
+  version "1.0.11"
+  sha256 "7ff0d588b40f9ad5ce78876f3ab8d2332a20f5128f6357413f741bb7fa172193"
   revision 1
 
   option "without-configure", "Do not run configure"
