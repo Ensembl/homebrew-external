@@ -12,6 +12,9 @@ class Kent < Formula
   # tag derived
 
   option "with-connector-c", "Build with connector-c dependency. Otherwise we depend on mysql-client"
+  option "with-web-patches", "Build with Ensembl Web patches. Bio::DB::BigFile needs patching too if it is going to use this kent installation. For more information, see: https://github.com/Ensembl/homebrew-web/tree/master/patches/kent"
+
+
 
   depends_on "ncurses"
   
@@ -27,7 +30,22 @@ class Kent < Formula
   depends_on "libpng"
   depends_on "openssl" 
 
+
   patch :DATA
+
+
+  if build.with? "web-patches"
+    patch do
+      url "https://www.ebi.ac.uk/~sboddu/kent/build.patch"
+      sha256 "3bb1aef9e8ca01812310e61044a0a59c6b437af161bfbfeb0b843ea1690cadf8"
+    end
+
+    patch do
+      url "https://www.ebi.ac.uk/~sboddu/kent/main.patch"
+      sha256 "e8a26152d0a99d7112ffda274768fae39085541654295365b21331e86e19e9bc"
+    end
+  end
+
 
   def install
     libpng = Formula["libpng"]
