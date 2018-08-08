@@ -36,12 +36,12 @@ class Kent < Formula
 
   if build.with? "web-patches"
     patch do
-      url "https://www.ebi.ac.uk/~sboddu/kent/build.patch"
+      url "https://raw.githubusercontent.com/Ensembl/homebrew-web/master/patches/kent/build.patch"
       sha256 "3bb1aef9e8ca01812310e61044a0a59c6b437af161bfbfeb0b843ea1690cadf8"
     end
 
     patch do
-      url "https://www.ebi.ac.uk/~sboddu/kent/main.patch"
+      url "https://raw.githubusercontent.com/Ensembl/homebrew-web/master/patches/kent/main.patch"
       sha256 "e8a26152d0a99d7112ffda274768fae39085541654295365b21331e86e19e9bc"
     end
   end
