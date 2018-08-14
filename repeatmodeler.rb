@@ -8,6 +8,7 @@ class Repeatmodeler < Formula
   version "1.0.11"
   url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-open-#{version}.tar.gz"
   sha256 "7ff0d588b40f9ad5ce78876f3ab8d2332a20f5128f6357413f741bb7fa172193"
+  revision 1
 
   option "without-configure", "Do not run configure"
 
@@ -17,45 +18,38 @@ class Repeatmodeler < Formula
   depends_on "ensembl/external/rmblast"
   depends_on "ensembl/external/trf"
 
-  # Configure RepeatModeler. The prompts are:
-  # PRESS ENTER TO CONTINUE
-  # PERL INSTALLATION PATH
-  # REPEATMODELER INSTALLATION PATH
-  # REPEATMASKER INSTALLATION PATH
-  # RECON INSTALLATION PATH
-  # RepeatScout INSTALLATION PATH
-  # 1. RMBlast - NCBI Blast with RepeatMasker extensionst
-  # RMBlast (rmblastn) INSTALLATION PATH
-  # Do you want RMBlast to be your default search engine for Repeatmasker?
-  # 3. Done
   def install
     prefix.install Dir["*"]
     bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
 
-    perl = if ENV.has_key?('HOMEBREW_PLENV_ROOT')
-      %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
-    else
-      "/usr/bin/perl"
-    end
-    (prefix/"config.txt").write <<~EOS
-
-      #{perl}
-      #{prefix}
-      #{Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec"}
-      #{Formula["ensembl/external/recon"].opt_prefix/"bin"}
-      #{Formula["ensembl/external/repeatscout"].opt_prefix}
-      #{Formula["ensembl/external/trf"].opt_prefix/"bin"}
-      1
-      #{HOMEBREW_PREFIX}/bin
-      Y
-      3
-      EOS
   end
 
   def post_install
-    cd prefix do
-      system "perl ./configure <config.txt"
-    end if build.with? "configure"
+    system "cp", libexec/"RepeatMaskerConfig.tmpl", libexec/"RepeatMaskerConfig.pm"
+    inreplace libexec/"RepeatMaskerConfig.pm" do |f|
+      f.gsub! /(REPEATMASKER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec").concat('";')
+      f.gsub! /(RMBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
+      f.gsub! /(WUBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
+      f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "ncbi";'
+      f.gsub! /(RECON_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
+      f.gsub! /(TRF_PRGM\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/trf'].opt_bin).concat('/trf";')
+      f.gsub! /(RSCOUT_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
+    end
+
+    if build.with? "perl"
+      perl = Formula["perl"].opt_bin/"perl"
+    else
+      if ENV.has_key?('HOMEBREW_PLENV_ROOT')
+        perl = %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
+      else
+        perl = "/usr/bin/perl"
+      end
+    end
+
+    for file in ["BuildDatabase", "Refiner", "RepModelConfig.pm.tmpl", "MultAln.pm", "RepeatModeler", "util/viewMSA.pl", "util/dfamConsensusTool.pl", "util/Linup", "util/renameIds.pl", "RepeatClassifier", "SeedAlignment.pm", "TRFMask", "SequenceSimilarityMatrix.pm", "configure", "configure", "NeedlemanWunschGotohAlgorit", "RepeatUtil.pm", "SeedAlignmentCollection.pm"] do
+      inreplace "#{libexec}/#{file}", /^#!.*perl/, "#!#{perl}"
+    end
+
   end
 
   def caveats; <<~EOS
