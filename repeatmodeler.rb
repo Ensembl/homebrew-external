@@ -25,8 +25,8 @@ class Repeatmodeler < Formula
   end
 
   def post_install
-    system "cp", libexec/"RepeatMaskerConfig.tmpl", libexec/"RepeatMaskerConfig.pm"
-    inreplace libexec/"RepeatMaskerConfig.pm" do |f|
+    system "cp", libexec/"RepModelConfig.pm.tmpl", libexec/"RepModelConfig.pm"
+    inreplace libexec/"RepModelConfig.pm" do |f|
       f.gsub! /(REPEATMASKER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec").concat('";')
       f.gsub! /(RMBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
       f.gsub! /(WUBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
