@@ -8,7 +8,7 @@ class Repeatmodeler < Formula
   version "1.0.11"
   url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-open-#{version}.tar.gz"
   sha256 "7ff0d588b40f9ad5ce78876f3ab8d2332a20f5128f6357413f741bb7fa172193"
-  revision 1
+  revision 2
 
   option "without-configure", "Do not run configure"
 
