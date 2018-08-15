@@ -19,8 +19,9 @@ class Repeatmodeler < Formula
   depends_on "ensembl/external/trf"
 
   def install
-    prefix.install Dir["*"]
-    bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
+    libexec.install Dir["*"]
+    bin.install_symlink libexec/"RepeatModeler"
+    bin.install_symlink libexec/"BuildDatabase"
 
   end
 
