@@ -47,7 +47,7 @@ class Repeatmodeler < Formula
       end
     end
 
-    for file in ["BuildDatabase", "Refiner", "RepModelConfig.pm.tmpl", "MultAln.pm", "RepeatModeler", "util/viewMSA.pl", "util/dfamConsensusTool.pl", "util/Linup", "util/renameIds.pl", "RepeatClassifier", "SeedAlignment.pm", "TRFMask", "SequenceSimilarityMatrix.pm", "configure", "configure", "NeedlemanWunschGotohAlgorit", "RepeatUtil.pm", "SeedAlignmentCollection.pm"] do
+    for file in ["BuildDatabase", "Refiner", "RepModelConfig.pm", "MultAln.pm", "RepeatModeler", "util/viewMSA.pl", "util/dfamConsensusTool.pl", "util/Linup", "util/renameIds.pl", "RepeatClassifier", "SeedAlignment.pm", "TRFMask", "SequenceSimilarityMatrix.pm", "RepeatUtil.pm", "SeedAlignmentCollection.pm", "NeedlemanWunschGotohAlgorithm.pm"] do
       inreplace "#{libexec}/#{file}", /^#!.*perl/, "#!#{perl}"
     end
 
