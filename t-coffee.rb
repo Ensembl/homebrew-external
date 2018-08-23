@@ -1,12 +1,11 @@
 class TCoffee < Formula
   homepage "http://www.tcoffee.org/"
-  version '9.03.r1336'
-  url "http://www.tcoffee.org/Packages/Beta/Version_9.03.r1336/T-COFFEE_distribution_Version_9.03.r1336.tar.gz"
-  sha256 "02147aa10c033b75658e360dc45ed1deaca4b6edc4c95b8bedde169e69568aac"
+  version '9.03.r1318'
+  url "http://www.tcoffee.org/Packages/Stable/Version_9.03.r1318/T-COFFEE_distribution_Version_9.03.r1318.tar.gz"
+  sha256 "5bb9a531a4036b741a8ff0fe19f3591a3f33bf7ac4f484e5329b1b5dd1fff43c"
   # doi "10.1006/jmbi.2000.4042"
   # tag origin homebrew-science
   # tag derived
-  revision 3
 
   depends_on 'ensembl/external/poa'
   depends_on 'dialign-tx'
