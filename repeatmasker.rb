@@ -1,10 +1,9 @@
 class Repeatmasker < Formula
   desc "Nucleic and proteic repeat masking tool"
   homepage "http://www.repeatmasker.org/"
-  version "4-0-5"
+  version "4-0-7"
   url "http://www.repeatmasker.org/RepeatMasker-open-#{version}.tar.gz"
-  sha256 "e4c15c64b90d57ce2448df4c49c37529eeb725e97f3366cc90f794a4c0caeef7"
-  revision 2
+  sha256 "16faf40e5e2f521146f6692f09561ebef5f6a022feb17031f2ddb3e3aabcf166"
   
   # tag origin homebrew-science
   # tag derived
@@ -26,45 +25,83 @@ class Repeatmasker < Formula
   end
 
   def post_install
-    system "cp", libexec/"RepeatMaskerConfig.tmpl", libexec/"RepeatMaskerConfig.pm"
-    inreplace libexec/"RepeatMaskerConfig.pm" do |f|
-      f.gsub! /(RMBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
-      f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "ncbi";'
-      f.gsub! /(TRF_PRGM\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/trf'].opt_bin).concat('/trf";')
-      f.gsub! /(HMMER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/hmmer'].opt_bin).concat('";')
-      f.gsub! "HOME", "REPEATMASKER_CACHE" if build.with? "cache"
-      if build.with? "phrap"
-        f.gsub! /(CROSSMATCH_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula["ensembl/moonshine/phrap"].opt_bin).concat('";')
-        f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "crossmatch";'
-      elsif build.with? "dfam"
-        f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "hmmer";'
-      end
-    end
+    open(libexec/"config.in", "w") { |f|
+      f.puts(libexec)
+      f.puts("#{HOMEBREW_PREFIX}/bin")
 
-    if build.with? "perl"
-      perl = Formula["perl"].opt_bin/"perl"
-    else
-      if ENV.has_key?('HOMEBREW_PLENV_ROOT')
-        perl = %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
+      default_is_set = false
+      if Formula['ensembl/moonshine/repbase'].installed?
+        f.puts(1)
+        f.puts("#{HOMEBREW_PREFIX}/bin")
+        f.puts("Y")
+        default_is_set = true
+        Dir.foreach (Formula['ensembl/moonshine/repbase'].opt_libexec) { |f|
+          if File.file?("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}")
+            if File.exists?("#{libexec}/Libraries/#{f}")
+              if not File.exists?("#{libexec}/Libraries/#{f}.cp") and not File.exists?("#{libexec}/Libraries/#{f}.rm")
+                mv("#{libexec}/Libraries/#{f}", "#{libexec}/Libraries/#{f}.cp")
+              end
+            else
+              open("#{libexec}/Libraries/#{f}.rm", "w")
+            end
+            cp("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}", "#{libexec}/Libraries/#{f}")
+          end
+        }
       else
-        perl = "/usr/bin/perl"
+        delete_lib_file = true
+        Dir.glob ("#{libexec}/Libraries/*.cp") { |f|
+          File.mv(f, f.gsub(".cp", ""))
+          if f.equals("#{libexec}/Libraries/RepeatMaskerLib.embl.cp")
+            delete_lib_file = false
+          end
+        }
+        Dir.glob ("#{libexec}/Libraries/*.rm") { |f|
+          File.delete(f)
+          File.delete(f.gsub(".rm", ""))
+        }
+        if delete_lib_file and File.exists?("#{libexec}/Libraries/RepeatMaskerLib.embl")
+          File.delete("#{libexec}/Libraries/RepeatMaskerLib.embl")
+        end
       end
+      if Formula['ensembl/external/rmblast'].installed?
+        f.puts(2)
+        f.puts("#{HOMEBREW_PREFIX}/bin")
+        if default_is_set
+          f.puts("N")
+        else
+          f.puts("Y")
+          default_is_set = true
+        end
+      end
+      if Formula['ensembl/external/hmmer'].installed?
+        f.puts(4)
+        f.puts("#{HOMEBREW_PREFIX}/bin")
+        if default_is_set
+          f.puts("N")
+        else
+          f.puts("Y")
+          default_is_set = true
+        end
+      end
+      f.puts(5)
+    }
+
+    perl = %x{which perl}.chomp
+    if build.with? "perl"
+      perl = "#{HOMEBREW_PREFIX}/bin"
     end
 
-    for file in ["RepeatMasker", "DateRepeats", "ProcessRepeats", "RepeatProteinMask", "DupMasker", "util/queryRepeatDatabase.pl", "util/queryTaxonomyDatabase.pl", "util/rmOutToGFF3.pl", "util/rmToUCSCTables.pl"] do
-      inreplace "#{libexec}/#{file}", /^#!.*perl/, "#!#{perl}"
+    begin
+      Timeout::timeout(600) {
+        system "cd #{libexec} && perl configure -re_exec_perl #{perl} < config.in"
+      }
+    rescue
+      odie("'perl configure' failed. You should try 'cd #{libexec} && perl configure -re_exec_perl #{perl}'")
     end
 
-    if build.with? "repbase"
-      system "cp --backup --suffix=.rm #{Formula['ensembl/moonshine/repbase'].opt_libexec}/* #{libexec}/Libraries"
-    else
-     system "for F in #{libexec}/Libraries/*.rm; do if [ -e \"$F\" ]; then mv $F ${F%.rm};fi;done"
-     inreplace "#{libexec}/Libraries/RepeatMaskerLib.embl", /RELEASE 20110419-min/, "RELEASE 20170101-min"
+    inreplace libexec/"RepeatMaskerConfig.pm" do |f|
+      f.gsub! "HOME", "REPEATMASKER_CACHE" if build.with? "cache"
     end
-
-    system "#{perl} #{libexec}/util/buildRMLibFromEMBL.pl #{libexec}/Libraries/RepeatMaskerLib.embl > #{libexec}/Libraries/RepeatMasker.lib"
-    system "#{HOMEBREW_PREFIX}/bin/makeblastdb -dbtype nucl -in #{libexec}/Libraries/RepeatMasker.lib"
-    system "#{HOMEBREW_PREFIX}/bin/makeblastdb -dbtype prot -in #{libexec}/Libraries/RepeatPeps.lib"
   end
 
   def caveats; <<~EOS
@@ -76,7 +113,8 @@ class Repeatmasker < Formula
       cd #{libexec} && ./configure
 
     You will need to set your environment variable REPEATMASKER_CACHE
-    where you want repeatmasker to write cache it.
+    where you want repeatmasker to write the cache files.
+    $REPEATMASKER_CACHE should exist and be writeable
       export REPEATMASKER_CACHE=$HOME
       or
       export REPEATMASKER_CACHE=/nfs/path/to/my/project
