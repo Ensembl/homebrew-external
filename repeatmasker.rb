@@ -2,7 +2,7 @@ class Repeatmasker < Formula
   desc "Nucleic and proteic repeat masking tool"
   homepage "http://www.repeatmasker.org/"
   version "4-0-5"
-  url "http://www.repeatmasker.org/RepeatMasker-open-#{version}.tar.gz"
+  url "https://www.ebi.ac.uk/~sboddu/docker_test/RepeatMasker-open-4-0-5.tar.gz"
   sha256 "e4c15c64b90d57ce2448df4c49c37529eeb725e97f3366cc90f794a4c0caeef7"
   revision 2
   
