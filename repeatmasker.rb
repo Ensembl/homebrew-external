@@ -4,6 +4,7 @@ class Repeatmasker < Formula
   version "4-0-7"
   url "http://www.repeatmasker.org/RepeatMasker-open-#{version}.tar.gz"
   sha256 "16faf40e5e2f521146f6692f09561ebef5f6a022feb17031f2ddb3e3aabcf166"
+  revision 1
   
   # tag origin homebrew-science
   # tag derived
@@ -86,9 +87,12 @@ class Repeatmasker < Formula
       f.puts(5)
     }
 
-    perl = %x{which perl}.chomp
     if build.with? "perl"
       perl = "#{HOMEBREW_PREFIX}/bin"
+    elsif ENV.has_key?('HOMEBREW_PLENV_ROOT')
+      perl = %x{PLENV_ROOT=#{ENV['HOMEBREW_PLENV_ROOT']} #{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
+    else
+      perl = %x{which perl}.chomp
     end
 
     begin
@@ -114,7 +118,7 @@ class Repeatmasker < Formula
 
     You will need to set your environment variable REPEATMASKER_CACHE
     where you want repeatmasker to write the cache files.
-    $REPEATMASKER_CACHE should exist and be writeable
+    $REPEATMASKER_CACHE/.RepeatMaskerCache should exist and be writeable
       export REPEATMASKER_CACHE=$HOME
       or
       export REPEATMASKER_CACHE=/nfs/path/to/my/project
