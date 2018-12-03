@@ -95,6 +95,8 @@ class Repeatmasker < Formula
       perl = %x{which perl}.chomp
     end
 
+    inreplace libexec/"util/buildRMLibFromEMBL.pl", /^#!.*perl/, "#!#{perl}"
+
     begin
       Timeout::timeout(600) {
         system "cd #{libexec} && perl configure -re_exec_perl #{perl} < config.in"
@@ -103,8 +105,8 @@ class Repeatmasker < Formula
       odie("'perl configure' failed. You should try 'cd #{libexec} && perl configure -re_exec_perl #{perl}'")
     end
 
-    inreplace libexec/"RepeatMaskerConfig.pm" do |f|
-      f.gsub! "HOME", "REPEATMASKER_CACHE" if build.with? "cache"
+    if build.with? "cache"
+      inreplace libexec/"RepeatMaskerConfig.pm", "HOME", "REPEATMASKER_CACHE"
     end
   end
 
