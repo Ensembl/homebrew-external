@@ -8,7 +8,7 @@ class Repeatmodeler < Formula
   version "1.0.11"
   url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-open-#{version}.tar.gz"
   sha256 "7ff0d588b40f9ad5ce78876f3ab8d2332a20f5128f6357413f741bb7fa172193"
-  revision 2
+  revision 3
 
   option "without-configure", "Do not run configure"
 
@@ -26,31 +26,36 @@ class Repeatmodeler < Formula
   end
 
   def post_install
-    system "cp", libexec/"RepModelConfig.pm.tmpl", libexec/"RepModelConfig.pm"
-    inreplace libexec/"RepModelConfig.pm" do |f|
-      f.gsub! /(REPEATMASKER_DIR\s*=)\s*\S+/, '\1 "'.concat(Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec").concat('";')
-      f.gsub! /(RMBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
-      f.gsub! /(WUBLAST_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
-      f.gsub! /(DEFAULT_SEARCH_ENGINE\s*=)\s*\S+/, '\1 "ncbi";'
-      f.gsub! /(RECON_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
-      f.gsub! /(TRF_PRGM\s*=)\s*\S+/, '\1 "'.concat(Formula['ensembl/external/trf'].opt_bin).concat('/trf";')
-      f.gsub! /(RSCOUT_DIR\s*=)\s*\S+/, '\1 "'.concat(HOMEBREW_PREFIX).concat('/bin";')
-    end
-
     if build.with? "perl"
-      perl = Formula["perl"].opt_bin/"perl"
+      perl = "#{HOMEBREW_PREFIX}/bin"
+    elsif ENV.has_key?('HOMEBREW_PLENV_ROOT')
+      perl = %x{PLENV_ROOT=#{ENV['HOMEBREW_PLENV_ROOT']} #{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
     else
-      if ENV.has_key?('HOMEBREW_PLENV_ROOT')
-        perl = %x{#{ENV['HOMEBREW_PLENV_ROOT']}/bin/plenv which perl}.chomp
-      else
-        perl = "/usr/bin/perl"
-      end
+      perl = %x{which perl}.chomp
     end
 
-    for file in ["BuildDatabase", "Refiner", "RepModelConfig.pm", "MultAln.pm", "RepeatModeler", "util/viewMSA.pl", "util/dfamConsensusTool.pl", "util/Linup", "util/renameIds.pl", "RepeatClassifier", "SeedAlignment.pm", "TRFMask", "SequenceSimilarityMatrix.pm", "RepeatUtil.pm", "SeedAlignmentCollection.pm", "NeedlemanWunschGotohAlgorithm.pm"] do
-      inreplace "#{libexec}/#{file}", /^#!.*perl/, "#!#{perl}"
-    end
+    open(libexec/"config.in", "w") { |f|
+      f.puts("")
+      f.puts(perl)
+      f.puts(libexec)
+      f.puts(Formula["ensembl/external/repeatmasker"].opt_prefix/"libexec")
+      f.puts("#{HOMEBREW_PREFIX}/bin")
+      f.puts(Formula["ensembl/external/repeatscout"].opt_prefix)
+      f.puts("#{HOMEBREW_PREFIX}/bin")
+      f.puts("#{HOMEBREW_PREFIX}/bin")
+      f.puts(1)
+      f.puts("#{HOMEBREW_PREFIX}/bin")
+      f.puts("Y")
+      f.puts(3)
+    }
 
+    begin
+      Timeout::timeout(300) {
+        system "cd #{libexec} && perl configure < config.in"
+      }
+    rescue
+      odie("'perl configure' failed. You should try 'cd #{libexec} && perl configure'")
+    end
   end
 
   def caveats; <<~EOS
