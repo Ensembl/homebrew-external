@@ -7,6 +7,7 @@ class Blast281 < Formula
   # tag derived
   version "2.8.1"
 
+  keg_only "blast #{version} clashes with ensembl/external/blast"
   option 'with-src', 'Build Blast from SRC not using precompiled binaries provided by NCBI'
 
   if build.with? 'src'
