@@ -47,7 +47,6 @@ class Blast281 < Formula
         --libdir=#{libexec}
         --without-debug
         --with-mt
-        --without-boost
       ]
 
       args << (build.with?("mysql") ? "--with-mysql" : "--without-mysql")
