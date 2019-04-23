@@ -85,7 +85,7 @@ class PerconaClient < Formula
     # Do not build the server
     args << "-DWITHOUT_SERVER=1"
 
-    system "cmake", *args
+    system "cmake", ".", *args
     system "make"
     system "make", "install"
 
