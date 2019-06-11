@@ -3,6 +3,7 @@ class Boost < Formula
   homepage "https://www.boost.org/"
   url "https://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
   sha256 "686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b"
+  revision "1"
 
   # tag origin homebrew-core
   # tag derived
@@ -32,8 +33,6 @@ class Boost < Formula
   #   build 2335
   #   cause "Dropped arguments to functions when linking with boost"
   # end
-
-  needs :cxx11 
 
   def install
     # Reduce memory usage below 4 GB for Circle CI.
