@@ -18,9 +18,9 @@ echo "Testing changed files in $COMMIT_RANGE"
 
 # Tap information
 TAP_DIR_NAME="$(basename "$PWD")"
-TAP_NICKNAME=${TAP_DIR_NAME%homebrew-}
 TAP_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
-echo "Tap is $TAP_NICKNAME"
+TAP_NAME="ensembl/${TAP_DIR_NAME#homebrew-}"
+echo "Tap name is $TAP_NAME"
 
 # Get the list of files that have changed
 CHANGED_FILES=()
@@ -43,7 +43,7 @@ ALL_FORMULAE=()
 MOUNTS=()
 for filename in "${CHANGED_FILES[@]}"
 do
-    ALL_FORMULAE+=("ensembl/$TAP_NICKNAME/${filename%.rb}")
+    ALL_FORMULAE+=("$TAP_NAME/${filename%.rb}")
     MOUNTS+=("-v" "$PWD/$filename:$TAP_PATH/$filename")
 done
 
@@ -52,8 +52,8 @@ for filename in "${CHANGED_FILES[@]}"
 do
     while IFS='' read -r line
     do
-        ALL_FORMULAE+=("ensembl/$TAP_NICKNAME/$(basename "$line")")
-    done < <(grep -l "\<depends_on[[:space:]]\+.ensembl/$TAP_NICKNAME/${filename%.rb}\>" ./*.rb | sed 's/\.rb$//')
+        ALL_FORMULAE+=("$TAP_NAME/$(basename "$line")")
+    done < <(grep -l "\<depends_on[[:space:]]\+.$TAP_NAME/${filename%.rb}\>" ./*.rb | sed 's/\.rb$//')
 done
 echo "Formulae to test (incl. reverse dependencies): ${ALL_FORMULAE[@]}"
 
