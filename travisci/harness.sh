@@ -23,9 +23,9 @@ do
     # - Mount the whole tap to use the new version of each formula
     # - Don't upgrade the formulae already installed as this image is expected to be updated regularly
     docker run ${USE_TTY:-} -i \
-               -v "$PWD:/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/homebrew-ensembl" \
+               -v "$PWD:/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/homebrew-external" \
                muffato/ensembl-linuxbrew-basic-dependencies \
-               brew install --build-from-source "ensembl/ensembl/$(basename "${filename%.rb}")"
+               brew install --build-from-source "ensembl/external/$(basename "${filename%.rb}")"
                #/bin/bash
 done
 
