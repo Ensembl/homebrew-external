@@ -11,7 +11,7 @@ if [ -z "$COMMIT_RANGE" ]
 then
     # Undo the shallow clone
     git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-    git fetch --unshallow origin master
+    git fetch --unshallow origin master || git fetch origin || echo "Can't update this repository. Moving on, fingers crossed"
     COMMIT_RANGE="origin/master..$TRAVIS_BRANCH"
 fi
 echo "Testing changed files in $COMMIT_RANGE"
