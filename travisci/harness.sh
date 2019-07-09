@@ -16,16 +16,51 @@ then
 fi
 echo "Testing changed files in $COMMIT_RANGE"
 
-# Test each changed file independently
-for filename in $(git diff --name-only "$COMMIT_RANGE" | grep '\.rb$')
+# Tap information
+TAP_DIR_NAME="$(basename "$PWD")"
+TAP_NICKNAME=${TAP_DIR_NAME%homebrew-}
+TAP_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
+echo "Tap is $TAP_NICKNAME"
+
+# Get the list of files that have changed
+CHANGED_FILES=()
+while IFS='' read -r line
 do
-    # Notes:
-    # - Mount the whole tap to use the new version of each formula
-    # - Don't upgrade the formulae already installed as this image is expected to be updated regularly
-    docker run ${USE_TTY:-} -i \
-               -v "$PWD:/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/homebrew-external" \
-               muffato/ensembl-linuxbrew-basic-dependencies \
-               brew install --build-from-source "ensembl/external/$(basename "${filename%.rb}")"
-               #/bin/bash
+    CHANGED_FILES+=("$line")
+done < <(git --no-pager diff --name-only "$COMMIT_RANGE" | grep '\.rb$')
+
+# Avoid the "unbound variable" error if the array is empty (because of set -u)
+if [ ${#CHANGED_FILES[@]} -eq 0 ]
+then
+    echo "No .rb file changed. See 'git diff' below:"
+    git --no-pager diff --name-only "$COMMIT_RANGE"
+    exit 0
+fi
+echo "Changed files: ${CHANGED_FILES[@]}"
+
+# Transform the files into formula names and mount points
+ALL_FORMULAE=()
+MOUNTS=()
+for filename in "${CHANGED_FILES[@]}"
+do
+    ALL_FORMULAE+=("ensembl/$TAP_NICKNAME/${filename%.rb}")
+    MOUNTS+=("-v" "$PWD/$filename:$TAP_PATH/$filename")
 done
+
+# Get the list of formulae they are a dependency of
+for filename in "${CHANGED_FILES[@]}"
+do
+    while IFS='' read -r line
+    do
+        ALL_FORMULAE+=("ensembl/$TAP_NICKNAME/$(basename "$line")")
+    done < <(grep -l "\<depends_on[[:space:]]\+.ensembl/$TAP_NICKNAME/${filename%.rb}\>" ./*.rb | sed 's/\.rb$//')
+done
+echo "Formulae to test (incl. reverse dependencies): ${ALL_FORMULAE[@]}"
+
+docker run ${USE_TTY:-} -i \
+       "${MOUNTS[@]}" \
+       --env HOMEBREW_NO_AUTO_UPDATE=1 \
+       muffato/ensembl-linuxbrew-basic-dependencies \
+       brew install --build-from-source "${ALL_FORMULAE[@]}"
+       #/bin/bash
 
