@@ -57,6 +57,7 @@ do
 done
 echo "Formulae to test (incl. reverse dependencies): ${ALL_FORMULAE[@]}"
 
+#echo \
 docker run ${USE_TTY:-} -i \
        "${MOUNTS[@]}" \
        --env HOMEBREW_NO_AUTO_UPDATE=1 \
