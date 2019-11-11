@@ -1,10 +1,12 @@
+require 'timeout'
+
 class Repeatmasker < Formula
   desc "Nucleic and proteic repeat masking tool"
   homepage "http://www.repeatmasker.org/"
   version "4-0-7"
   url "http://www.repeatmasker.org/RepeatMasker-open-#{version}.tar.gz"
   sha256 "16faf40e5e2f521146f6692f09561ebef5f6a022feb17031f2ddb3e3aabcf166"
-  revision 1
+  revision 2
   
   # tag origin homebrew-science
   # tag derived
@@ -19,10 +21,12 @@ class Repeatmasker < Formula
   depends_on "ensembl/external/trf"
   depends_on "ensembl/moonshine/phrap" => :recommended
   depends_on "ensembl/moonshine/repbase" => :recommended
+  depends_on "ensembl/ensembl/dupliconlib" => :optional
 
   def install
     libexec.install Dir["*"]
     bin.install_symlink libexec/"RepeatMasker"
+    bin.install_symlink libexec/"DupMasker"
   end
 
   def post_install
@@ -107,6 +111,12 @@ class Repeatmasker < Formula
 
     if build.with? "cache"
       inreplace libexec/"RepeatMaskerConfig.pm", "HOME", "REPEATMASKER_CACHE"
+    end
+    if File.exists?("#{libexec}/Libraries/dupliconlib.fa")
+      File.delete("#{libexec}/Libraries/dupliconlib.fa")
+    end
+    if Formula['ensembl/ensembl/dupliconlib'].installed?
+      Pathname("#{libexec}/Libraries").install_symlink "#{Formula['ensembl/ensembl/dupliconlib'].libexec}/dupliconlib.fa"
     end
   end
 
