@@ -18,7 +18,7 @@ echo "Testing changed files in $COMMIT_RANGE"
 
 # Tap information
 TAP_DIR_NAME="$(basename "$PWD")"
-TAP_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
+TAP_DOCKER_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
 TAP_NAME="ensembl/${TAP_DIR_NAME#homebrew-}"
 echo "Tap name is $TAP_NAME"
 
@@ -44,7 +44,7 @@ MOUNTS=()
 for filename in "${CHANGED_FILES[@]}"
 do
     ALL_FORMULAE+=("$TAP_NAME/${filename%.rb}")
-    MOUNTS+=("-v" "$PWD/$filename:$TAP_PATH/$filename")
+    MOUNTS+=("-v" "$PWD/$filename:$TAP_DOCKER_PATH/$filename")
 done
 
 # Get the list of formulae they are a dependency of
@@ -62,6 +62,6 @@ docker run ${USE_TTY:-} -i \
        "${MOUNTS[@]}" \
        --env HOMEBREW_NO_AUTO_UPDATE=1 \
        muffato/ensembl-linuxbrew-basic-dependencies \
-       /bin/bash -c "brew deps --union ${ALL_FORMULAE[*]} | if grep -q ensembl/moonshine/; then echo Test skipped because ensembl/moonshine is not available; else brew install --build-from-source ${ALL_FORMULAE[*]}; fi"
+       "$TAP_DOCKER_PATH/travisci/test_on_docker.sh" "${ALL_FORMULAE[@]}"
        #/bin/bash
 
