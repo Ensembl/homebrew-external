@@ -17,10 +17,15 @@ fi
 echo "Testing changed files in $COMMIT_RANGE"
 
 # Tap information
-TAP_DIR_NAME="$(basename "$PWD")"
+TAP_LOCAL_PATH="$PWD"
+TAP_DIR_NAME="$(basename "$TAP_LOCAL_PATH")"
 TAP_DOCKER_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
 TAP_NAME="ensembl/${TAP_DIR_NAME#homebrew-}"
 echo "Tap name is $TAP_NAME"
+
+# List the mount points
+MOUNTS=()
+MOUNTS+=("-v" "$TAP_LOCAL_PATH:$TAP_DOCKER_PATH")
 
 # Get the list of files that have changed
 CHANGED_FILES=()
@@ -38,13 +43,11 @@ then
 fi
 echo "Changed files: ${CHANGED_FILES[@]}"
 
-# Transform the files into formula names and mount points
+# Transform the files into formula names
 ALL_FORMULAE=()
-MOUNTS=()
 for filename in "${CHANGED_FILES[@]}"
 do
     ALL_FORMULAE+=("$TAP_NAME/${filename%.rb}")
-    MOUNTS+=("-v" "$PWD/$filename:$TAP_DOCKER_PATH/$filename")
 done
 
 # Get the list of formulae they are a dependency of
