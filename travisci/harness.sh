@@ -57,10 +57,11 @@ do
 done
 echo "Formulae to test (incl. reverse dependencies): ${ALL_FORMULAE[@]}"
 
+#echo \
 docker run ${USE_TTY:-} -i \
        "${MOUNTS[@]}" \
        --env HOMEBREW_NO_AUTO_UPDATE=1 \
        muffato/ensembl-linuxbrew-basic-dependencies \
-       brew install --build-from-source "${ALL_FORMULAE[@]}"
+       /bin/bash -c "brew deps --union ${ALL_FORMULAE[*]} | if grep -q ensembl/moonshine/; then echo Test skipped because ensembl/moonshine is not available; else brew install --build-from-source ${ALL_FORMULAE[*]}; fi"
        #/bin/bash
 
