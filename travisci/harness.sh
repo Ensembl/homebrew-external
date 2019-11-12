@@ -17,15 +17,26 @@ fi
 echo "Testing changed files in $COMMIT_RANGE"
 
 # Tap information
+DOCKER_TAP_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl"
+# The tap being tested
 TAP_LOCAL_PATH="$PWD"
 TAP_DIR_NAME="$(basename "$TAP_LOCAL_PATH")"
-TAP_DOCKER_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$TAP_DIR_NAME"
+TAP_DOCKER_PATH="$DOCKER_TAP_PATH/$TAP_DIR_NAME"
 TAP_NAME="ensembl/${TAP_DIR_NAME#homebrew-}"
 echo "Tap name is $TAP_NAME"
+# The other main Ensembl tap (needs to be downloaded)
+OTHER_TAP_NAME="homebrew-ensembl"
+OTHER_TAP_URL="https://github.com/Ensembl/$OTHER_TAP_NAME"
+OTHER_TAP_LOCAL_PATH="$PWD/.deps/$OTHER_TAP_NAME"
+OTHER_TAP_DOCKER_PATH="$DOCKER_TAP_PATH/$OTHER_TAP_NAME"
+rm -rf "$OTHER_TAP_LOCAL_PATH"
+mkdir -p "$OTHER_TAP_LOCAL_PATH"
+git clone --depth 1 "$OTHER_TAP_URL" "$OTHER_TAP_LOCAL_PATH"
 
 # List the mount points
 MOUNTS=()
 MOUNTS+=("-v" "$TAP_LOCAL_PATH:$TAP_DOCKER_PATH")
+MOUNTS+=("-v" "$OTHER_TAP_LOCAL_PATH:$OTHER_TAP_DOCKER_PATH")
 
 # Get the list of files that have changed
 CHANGED_FILES=()
