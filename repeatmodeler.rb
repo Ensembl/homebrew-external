@@ -1,3 +1,5 @@
+require 'timeout'
+
 class Repeatmodeler < Formula
   desc "De-novo repeat family identification and modeling package"
   homepage "http://www.repeatmasker.org/RepeatModeler.html"
@@ -5,10 +7,9 @@ class Repeatmodeler < Formula
   # tag origin homebrew-science
   # tag derived
 
-  version "1.0.11"
-  url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-open-#{version}.tar.gz"
-  sha256 "7ff0d588b40f9ad5ce78876f3ab8d2332a20f5128f6357413f741bb7fa172193"
-  revision 3
+  version "2.0"
+  url "http://www.repeatmasker.org/RepeatModeler/RepeatModeler-#{version}.tar.gz"
+  sha256 "0fda277b7ee81f7fc9c989078a1220cf263d7b76c92b260d36eecc9db7179f5b"
 
   option "without-configure", "Do not run configure"
 
