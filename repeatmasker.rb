@@ -3,10 +3,9 @@ require 'timeout'
 class Repeatmasker < Formula
   desc "Nucleic and proteic repeat masking tool"
   homepage "http://www.repeatmasker.org/"
-  version "4-0-7"
-  url "http://www.repeatmasker.org/RepeatMasker-open-#{version}.tar.gz"
-  sha256 "16faf40e5e2f521146f6692f09561ebef5f6a022feb17031f2ddb3e3aabcf166"
-  revision 2
+  version "4.1.0"
+  url "http://www.repeatmasker.org/RepeatMasker-#{version}.tar.gz"
+  sha256 "7370014c2a7bfd704f0e487cea82a42f05de100c40ea7cbb50f54e20226fe449"
   
   # tag origin homebrew-science
   # tag derived
