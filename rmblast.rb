@@ -4,20 +4,18 @@ class Rmblast < Formula
   # tag "bioinformatics"
   # tag origin homebrew-science
   # tag derived
+  keg_only "Uses software from NCBI blast"
 
-  version "2.2.28"
+  version "2.10.0"
   if OS.mac?
-    url "http://ftp.ncbi.nlm.nih.gov/blast/executables/rmblast/LATEST/ncbi-rmblastn-#{version}-universal-macosx.tar.gz"
+    url "http://www.repeatmasker.org/rmblast-#{version}+-x64-macosx.tar.gz"
     sha256 "f94e91487b752eb24386c3571250a3394ec7a00e7a5370dd103f574c721b9c81"
   elsif OS.linux?
-    url "http://ftp.ncbi.nlm.nih.gov/blast/executables/rmblast/LATEST/ncbi-rmblastn-#{version}-x64-linux.tar.gz"
-    sha256 "e6503ad25a6760d2d2931f17efec80ba879877b4042a1d10a60820ec21a61cfe"
+    url "http://www.repeatmasker.org/rmblast-#{version}+-x64-linux.tar.gz"
+    sha256 "e592d0601a98b9764dd55f2aa4815beb1987beb7222f0e171d4f4cd70a0d4a03"
   else
-    raise "Unknown operating system"
+    onoe "Unknown operating system"
   end
-  revision 1
-
-  depends_on "ensembl/external/blast" => :recommended
 
   def install
     prefix.install Dir["*"]
