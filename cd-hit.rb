@@ -6,9 +6,9 @@ class CdHit < Formula
   # tag origin homebrew-science
   # tag derived
 
-  url "https://github.com/weizhongli/cdhit/releases/download/V4.6.8/cd-hit-v4.6.8-2017-0621-source.tar.gz"
-  version "4.6.8"
-  sha256 "b67ef2b3a9ff0ee6c27b1ce33617e1bfc7981c1034ea53f8923d025144e595ac"
+  version "4.8.1"
+  url "https://github.com/weizhongli/cdhit/releases/download/V#{version}/cd-hit-v#{version}-2019-0228.tar.gz"
+  sha256 "26172dba3040d1ae5c73ff0ac6c3be8c8e60cc49fc7379e434cdf9cb1e7415de"
 
   head "https://github.com/weizhongli/cdhit.git"
 
