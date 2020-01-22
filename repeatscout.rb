@@ -5,8 +5,8 @@ class Repeatscout < Formula
   # tag origin homebrew-science
   # tag derived
 
-  url "https://bix.ucsd.edu/repeatscout/RepeatScout-1.0.5.tar.gz"
-  sha256 "bda6f782382f2b7dcb6a004b7da586d5046b3c12429b158e24787be62de6199c"
+  url "http://www.repeatmasker.org/RepeatScout-1.0.6.tar.gz"
+  sha256 "31a44cf648d78356aec585ee5d3baf936d01eaba43aed382d9ac2d764e55b716"
 
   depends_on "ensembl/external/trf" => :optional
 
