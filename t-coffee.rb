@@ -8,10 +8,10 @@ class TCoffee < Formula
   # tag derived
 
   depends_on 'ensembl/external/poa'
-  depends_on 'dialign-tx'
-  depends_on 'dialign-t'
-  depends_on 'pcma'
-  depends_on 'probcons'
+  depends_on 'ensembl/ensembl/dialign-tx'
+  depends_on 'ensembl/ensembl/dialign-t'
+  depends_on 'ensembl/ensembl/pcma'
+  depends_on 'ensembl/ensembl/probcons'
   depends_on 'ensembl/external/clustal-w'
   depends_on 'ensembl/external/mafft'
   depends_on 'ensembl/external/muscle'
