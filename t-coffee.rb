@@ -12,10 +12,10 @@ class TCoffee < Formula
   depends_on 'dialign-t'
   depends_on 'pcma'
   depends_on 'probcons'
-  depends_on 'clustal-w'
+  depends_on 'ensembl/external/clustal-w'
   depends_on 'ensembl/external/mafft'
-  depends_on 'muscle'
-  depends_on 'kalign'
+  depends_on 'ensembl/external/muscle'
+  depends_on 'ensembl/external/kalign'
 
   def install
     cd 't_coffee_source' do
