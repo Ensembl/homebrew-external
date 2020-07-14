@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
-cd /home/linuxbrew/EnsemblTaps
-for i in *
+# directories are mounted read-only under Travis, so take a copy
+TARGET_TAP_DIR="$(brew --prefix)/Homebrew/Library/Taps/ensembl"
+for d in homebrew-*
 do
-    TARGET="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/ensembl/$i"
-    rm -rf "$TARGET"
-    cp -a "$i" "$TARGET"
+	rm -rf "$TARGET_TAP_DIR/$d"
+	cp -a "$d" "$TARGET_TAP_DIR/$d"
 done
 
 brew deps --union "$@" | if grep -q ensembl/moonshine/

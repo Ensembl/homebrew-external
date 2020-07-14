@@ -17,7 +17,7 @@ fi
 echo "Testing changed files in $COMMIT_RANGE"
 
 # Tap information
-DOCKER_TAP_PATH="/home/linuxbrew/EnsemblTaps"
+DOCKER_TAP_PATH="/home/linuxbrew"
 # The tap being tested
 TAP_LOCAL_PATH="$PWD"
 TAP_DIR_NAME="$(basename "$TAP_LOCAL_PATH")"
