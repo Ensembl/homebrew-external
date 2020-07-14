@@ -6,7 +6,7 @@ set -euo pipefail
 # Enable Ctrl+C if run interactively
 test -t 1 && USE_TTY="-t"
 
-COMMIT_RANGE="$TRAVIS_COMMIT_RANGE"
+COMMIT_RANGE="011fb415328c3e0551080cae3a8e49ca93a995d5..HEAD"
 if [ -z "$COMMIT_RANGE" ]
 then
     # Undo the shallow clone
