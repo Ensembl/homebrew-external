@@ -3,6 +3,9 @@ class Diamond < Formula
   homepage "http://www.diamondsearch.org/index.php"
   url "https://github.com/bbuchfink/diamond/archive/v2.0.4.tar.gz"
   sha256 "94e8fe72bdc28b83fd0f2d90c439b58b63b38263aa1a3905582ef68f614ae95d"
+  # tag "bioinformatics"
+  # tag origin homebrew-core
+  # tag derived
   version "2.0.4"
 
   depends_on "cmake" => :build
