@@ -37,7 +37,10 @@ class Graphviz238 < Formula
   depends_on "librsvg"
   depends_on "freetype"
   depends_on "libpng"
-  depends_on :x11
+  
+  if build.with? "x11"
+    depends_on "libx11"
+  end
 
   fails_with :clang do
     build 318
