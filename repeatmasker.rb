@@ -29,66 +29,59 @@ class Repeatmasker < Formula
   end
 
   def post_install
-    open(libexec/"config.in", "w") { |f|
-      f.puts(libexec)
-      f.puts("#{HOMEBREW_PREFIX}/bin")
-
-      default_is_set = false
-      if Formula['ensembl/moonshine/repbase'].installed?
-        f.puts(1)
-        f.puts("#{HOMEBREW_PREFIX}/bin")
-        f.puts("Y")
+    args = []
+    default_is_set = false
+    if build.with? "dfam"
+      args << "-default_search_engine hmmer"
+      default_is_set = true
+    end
+    if ! Formula['ensembl/moonshine/phrap'].any_installed_version.nil?
+      args << "-default_search_engine crossmatch"
+      if !default_is_set
+        args << "-crossmatch_dir #{HOMEBREW_PREFIX}/bin"
         default_is_set = true
-        Dir.foreach (Formula['ensembl/moonshine/repbase'].opt_libexec) { |f|
-          if File.file?("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}")
-            if File.exists?("#{libexec}/Libraries/#{f}")
-              if not File.exists?("#{libexec}/Libraries/#{f}.cp") and not File.exists?("#{libexec}/Libraries/#{f}.rm")
-                mv("#{libexec}/Libraries/#{f}", "#{libexec}/Libraries/#{f}.cp")
-              end
-            else
-              open("#{libexec}/Libraries/#{f}.rm", "w")
+      end
+    end
+    if ! Formula['ensembl/moonshine/repbase'].any_installed_version.nil?
+      Dir.foreach (Formula['ensembl/moonshine/repbase'].opt_libexec) { |f|
+        if File.file?("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}")
+          if File.exists?("#{libexec}/Libraries/#{f}")
+            if not File.exists?("#{libexec}/Libraries/#{f}.cp") and not File.exists?("#{libexec}/Libraries/#{f}.rm")
+              mv("#{libexec}/Libraries/#{f}", "#{libexec}/Libraries/#{f}.cp")
             end
-            cp("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}", "#{libexec}/Libraries/#{f}")
+          else
+            open("#{libexec}/Libraries/#{f}.rm", "w")
           end
-        }
-      else
-        delete_lib_file = true
-        Dir.glob ("#{libexec}/Libraries/*.cp") { |f|
-          File.mv(f, f.gsub(".cp", ""))
-          if f.equals("#{libexec}/Libraries/RepeatMaskerLib.embl.cp")
-            delete_lib_file = false
-          end
-        }
-        Dir.glob ("#{libexec}/Libraries/*.rm") { |f|
-          File.delete(f)
-          File.delete(f.gsub(".rm", ""))
-        }
-        if delete_lib_file and File.exists?("#{libexec}/Libraries/RepeatMaskerLib.embl")
-          File.delete("#{libexec}/Libraries/RepeatMaskerLib.embl")
+          cp("#{Formula['ensembl/moonshine/repbase'].opt_libexec}/#{f}", "#{libexec}/Libraries/#{f}")
         end
-      end
-      if Formula['ensembl/external/rmblast'].installed?
-        f.puts(2)
-        f.puts("#{HOMEBREW_PREFIX}/bin")
-        if default_is_set
-          f.puts("N")
-        else
-          f.puts("Y")
-          default_is_set = true
+      }
+    else
+      delete_lib_file = true
+      Dir.glob ("#{libexec}/Libraries/*.cp") { |f|
+        File.mv(f, f.gsub(".cp", ""))
+        if f.equals("#{libexec}/Libraries/RepeatMaskerLib.embl.cp")
+          delete_lib_file = false
         end
+      }
+      Dir.glob ("#{libexec}/Libraries/*.rm") { |f|
+        File.delete(f)
+        File.delete(f.gsub(".rm", ""))
+      }
+      if delete_lib_file and File.exists?("#{libexec}/Libraries/RepeatMaskerLib.embl")
+        File.delete("#{libexec}/Libraries/RepeatMaskerLib.embl")
       end
-      if Formula['ensembl/external/hmmer'].installed?
-        f.puts(4)
-        f.puts("#{HOMEBREW_PREFIX}/bin")
-        if default_is_set
-          f.puts("N")
-        else
-          f.puts("Y")
-          default_is_set = true
-        end
-      end
-      f.puts(5)
-    }
+    end
+    args << "-trf_prgm #{HOMEBREW_PREFIX}/bin/trf"
+    args << "-rmblast_dir #{HOMEBREW_PREFIX}/opt/rmblast/bin"
+    if !default_is_set
+      args << "-default_search_engine rmblast"
+      default_is_set = true
+    end
+    args << "-hmmer_dir #{HOMEBREW_PREFIX}/bin"
+    if !default_is_set
+      args << "-default_search_engine hmmer"
+      default_is_set = true
+    end
 
     if build.with? "perl"
       perl = "#{HOMEBREW_PREFIX}/bin"
@@ -98,23 +91,19 @@ class Repeatmasker < Formula
       perl = %x{which perl}.chomp
     end
 
-    inreplace libexec/"util/buildRMLibFromEMBL.pl", /^#!.*perl/, "#!#{perl}"
+    # maskFile.pl does not exist in the archive so I replace it with a different file
+    inreplace libexec/"configure", "maskFile", "buildSummary"
 
-    begin
-      Timeout::timeout(600) {
-        system "cd #{libexec} && perl configure -re_exec_perl #{perl} < config.in"
-      }
-    rescue
-      odie("'perl configure' failed. You should try 'cd #{libexec} && perl configure -re_exec_perl #{perl}'")
+    if build.with? "configure"
+      cd libexec do
+        system "#{perl} configure #{args.join(' ')}"
+      end
     end
 
-    if build.with? "cache"
-      inreplace libexec/"RepeatMaskerConfig.pm", "HOME", "REPEATMASKER_CACHE"
-    end
     if File.exists?("#{libexec}/Libraries/dupliconlib.fa")
       File.delete("#{libexec}/Libraries/dupliconlib.fa")
     end
-    if Formula['ensembl/ensembl/dupliconlib'].installed?
+    if ! Formula['ensembl/ensembl/dupliconlib'].any_installed_version.nil?
       Pathname("#{libexec}/Libraries").install_symlink "#{Formula['ensembl/ensembl/dupliconlib'].libexec}/dupliconlib.fa"
     end
   end
@@ -125,14 +114,7 @@ class Repeatmasker < Formula
     with:
       brew postinstall ensembl/external/repeatmasker
       or
-      cd #{libexec} && ./configure
-
-    You will need to set your environment variable REPEATMASKER_CACHE
-    where you want repeatmasker to write the cache files.
-    $REPEATMASKER_CACHE/.RepeatMaskerCache should exist and be writeable
-      export REPEATMASKER_CACHE=$HOME
-      or
-      export REPEATMASKER_CACHE=/nfs/path/to/my/project
+      cd #{libexec} && perl ./configure
     EOS
   end
 

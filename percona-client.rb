@@ -15,13 +15,21 @@ class PerconaClient < Formula
   if OS.mac?
     depends_on "pidof" unless MacOS.version >= :mountain_lion
   end
-  depends_on "openssl"
+  depends_on "ensembl/external/openssl@1.0"
   depends_on "readline" unless OS.mac?
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10" do
+    cause "ISO C++ forbids comparison between pointer and integer [-fpermissive]"
+  end
 
   conflicts_with "mysql-connector-c",
     :because => "both install `mysql_config`"
 
-  conflicts_with "mariadb", "mysql", "mysql-cluster",
+  conflicts_with "mariadb", "mysql",
     :because => "percona, mariadb, and mysql install the same binaries."
   conflicts_with "mysql-connector-c",
     :because => "both install MySQL client libraries"

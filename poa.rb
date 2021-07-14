@@ -9,6 +9,13 @@ class Poa < Formula
   version "2.0"
   sha256 "d98d8251af558f442d909a6527694825ef6f79881b7636cad4925792559092c2"
 
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
+
   def install
     system "make", "poa"
     bin.install "poa", "make_pscores.pl"

@@ -10,6 +10,14 @@ class NewickUtils < Formula
 
   head "https://github.com/tjunier/newick_utils.git"
 
+  depends_on "libxml2"
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
+
   # Ignore errors in nw_display that I think are fine (the SVG is almost the same)
   patch :DATA
 

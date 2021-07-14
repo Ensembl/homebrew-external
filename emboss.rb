@@ -12,6 +12,7 @@ class Emboss < Formula
 
   depends_on "pkg-config" => :build
   depends_on "libpng"     => :recommended
+  depends_on "ensembl/external/percona-client"
 
   def install
     inreplace "Makefile.in", "$(bindir)/embossupdate", "" if build.without? "embossupdate"

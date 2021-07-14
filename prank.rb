@@ -6,13 +6,19 @@ class Prank < Formula
   # tag origin homebrew-science
   # tag derived
 
+  depends_on "gcc@6" => :build
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
+
   depends_on "ensembl/external/biopp"
-  depends_on "ensembl/external/mafft"
+  depends_on "ensembl/external/mafft@7.427"
   depends_on "ensembl/external/exonerate22"
 
   def install
     cd "src" do
-      system "make"
+      system "make", "CPPFLAGS=-std=c++98"
       bin.install "prank"
       man1.install "prank.1"
     end

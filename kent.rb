@@ -20,15 +20,23 @@ class Kent < Formula
   
   # we use the Ensembl mysql-client compile. You can use 
   # mysql-connector-c brings in the MySQL libs for less effort. YMMV
+  # We need to use the same openssl for kent and the MySQL library
   
   if build.with? "connector-c"
     depends_on "mysql-connector-c"
+    depends_on "openssl"
   else
     depends_on "ensembl/external/percona-client"
+    depends_on "ensembl/external/openssl@1.0"
   end
   
   depends_on "libpng"
-  depends_on "openssl" 
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
 
 
   patch :DATA
@@ -48,13 +56,15 @@ class Kent < Formula
 
 
   def install
+    ENV.deparallelize
     libpng = Formula["libpng"]
     if build.with? "connector-c"
       mysql = Formula["mysql-connector-c"]
+      openssl = Formula["openssl"]
     else
       mysql = Formula["ensembl/external/percona-client"]
+      openssl = Formula["ensembl/external/openssl@1.0"]
     end
-    openssl = Formula["openssl"]
 
     machtype = `uname -m`.chomp
 
@@ -64,7 +74,7 @@ class Kent < Formula
     args << "PNGLIB=-L#{libpng.opt_lib} -lpng -lz"
     args << "PNGINCL=-I#{libpng.opt_include}"
 
-    if mysql.installed?
+    if !mysql.any_installed_version.nil?
       args << "MYSQLINC=#{mysql.opt_include}/mysql"
       args << "MYSQLLIBS=-lmysqlclient -lz"
     end

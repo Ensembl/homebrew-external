@@ -11,10 +11,16 @@ class Tophat < Formula
 
   bottle :disable, "needs to be rebuilt with latest boost"
 
-  depends_on "ensembl/external/boost"
+  depends_on "boost"
+  depends_on "boost-mpi"
   depends_on "bowtie2"
   depends_on "ensembl/external/bowtie" => :optional
-  depends_on "python" if MacOS.version <= :snow_leopard
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
 
   patch :p0, :DATA
 
@@ -26,11 +32,13 @@ class Tophat < Formula
   def install
     ENV.deparallelize
     ENV.append "LIBS", "-lboost_system-mt -lboost_thread-mt"
+    ENV.append "CC", "gcc-6"
 
     resource("test").stage { (share/"test_data").install Dir["*"] }
 
     system "./configure", "--disable-dependency-tracking",
-                          "--prefix=#{prefix}"
+                          "--prefix=#{prefix}",
+                          "--with-boost=#{Formula['boost'].opt_prefix}"
     system "make", "install"
 
     # clean up Python libraries from bin

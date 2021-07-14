@@ -13,7 +13,7 @@ class TCoffee < Formula
   depends_on 'ensembl/ensembl/pcma'
   depends_on 'ensembl/ensembl/probcons'
   depends_on 'ensembl/external/clustal-w'
-  depends_on 'ensembl/external/mafft'
+  depends_on 'ensembl/external/mafft@7.427'
   depends_on 'ensembl/external/muscle'
   depends_on 'ensembl/external/kalign'
 

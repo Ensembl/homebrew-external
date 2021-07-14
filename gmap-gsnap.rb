@@ -9,6 +9,13 @@ class GmapGsnap < Formula
   # tag derived
 
   depends_on "samtools"
+  depends_on "gcc@6"
+
+  fails_with gcc: "7"
+  fails_with gcc: "8"
+  fails_with gcc: "9"
+  fails_with gcc: "10"
+
 
   def install
     system "./configure", "--prefix=#{prefix}"

@@ -26,6 +26,7 @@ class Repeatmodeler < Formula
     depends_on "genometools"
     depends_on "ensembl/ensembl/ltr_retriever"
     depends_on "ensembl/ensembl/ninja-cluster"
+    # It needs mafft >= 7.407 so we avoid ensembl/external/mafft
     depends_on "mafft"
   end
 
@@ -73,6 +74,7 @@ class Repeatmodeler < Formula
       }
 
       begin
+        # If the config.in is wrong, configure will loop/wait for ever. We set a timer to avoid this problem
         Timeout::timeout(300) {
           cd libexec do
             system "#{perl} configure < config.in"
