@@ -8,7 +8,7 @@ class Mcl < Formula
   # tag origin homebrew-science
   # tag derived
 
-  depends_on "gcc@6"
+  depends_on "gcc@6" => :build
   fails_with gcc: "7"
   fails_with gcc: "8"
   fails_with gcc: "9"
