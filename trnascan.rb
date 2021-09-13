@@ -1,5 +1,5 @@
 class Trnascan < Formula
-  desc "tRNA detection in large-scale genome sequence"
+  desc "Searching for tRNA genes in genomic sequence"
   homepage "http://trna.ucsc.edu/tRNAscan-SE"
 
   # doi "10.1093/nar/gkab688"
