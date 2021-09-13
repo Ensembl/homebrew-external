@@ -7,7 +7,7 @@ class Trnascan < Formula
   # tag origin homebrew-science
   # tag derived
 
-  version "2.09"
+  version "2.0.9"
   url "http://trna.ucsc.edu/software/trnascan-se-#{version}.tar.gz"
   sha256 "566b5c8221bf90c55eb3733e1dbe67ba6b722e70e8eae3065959c0633c02002a"
 
