@@ -26,10 +26,7 @@ class Trnascan < Formula
 
   test do
     system "tRNAscan-SE", "-d", "-y", "-o", "test.out", "#{pkgshare}/Example1.fa"
-    if FileTest.exists? "test.out"
-      `diff test.out #{pkgshare}/Example1-tRNAs.out`.empty? ? true : false
-    else
-      false
-    end
+    assert_predicate testpath/"test.out", :exist?
+    `diff test.out #{pkgshare}/Example1-tRNAs.out`.empty? ? true : false
   end
 end
