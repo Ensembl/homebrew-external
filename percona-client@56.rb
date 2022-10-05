@@ -84,7 +84,7 @@ class PerconaClientAT56 < Formula
     # Do not build the server
     args << "-DWITHOUT_SERVER=1"
 
-    system "CFLAGS='-fpermissive' cmake", ".", *args
+    system "CFLAGS='-fpermissive'", "cmake", ".", *args
     system "make"
     system "make", "install"
 
