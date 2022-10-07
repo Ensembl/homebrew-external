@@ -9,7 +9,7 @@ class PerconaClientAT56 < Formula
   version "5.6.36-82.1"
   sha256 "bebab31321e17682bc23f0f1e95211f002ba2a24c21d9a7ce9821cbe2a1ba4ba"
 
-  keg_only :versioned_formulae
+  keg_only 'versioned_formulae'
 
   option "with-test", "Build with unit tests"
 
@@ -57,6 +57,8 @@ class PerconaClientAT56 < Formula
       -DCOMPILATION_COMMENT=Homebrew
       -DCMAKE_FIND_FRAMEWORK=LAST
       -DCMAKE_VERBOSE_MAKEFILE=ON
+      -DCMAKE_CXX_FLAGS='-fpermissive'
+      -DWITH_DEFAULT_COMPILER_OPTIONS=ON
     ]
     args << "-DWITH_EDITLINE=system" if OS.mac?
 
@@ -84,7 +86,7 @@ class PerconaClientAT56 < Formula
     # Do not build the server
     args << "-DWITHOUT_SERVER=1"
 
-    system "CFLAGS='-fpermissive'", "cmake", ".", *args
+    system "cmake", ".", *args
     system "make"
     system "make", "install"
 
