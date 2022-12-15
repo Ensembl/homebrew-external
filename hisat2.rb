@@ -1,8 +1,8 @@
 class Hisat2 < Formula
   desc "graph-based alignment to a population of genomes"
-  homepage "https://ccb.jhu.edu/software/hisat2/"
-  url "ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.0.5-source.zip"
-  sha256 "ef74e2ab828aff8fd8a6320feacc8ddb030b58ecbc81c095609acb3851b6dc53"
+  homepage "https://github.com/DaehwanKimLab/hisat2"
+  url "https://github.com/DaehwanKimLab/hisat2/archive/refs/tags/v2.2.1.tar.gz"
+  sha256 "f3f4f867d0a6b1f880d64efc19deaa5788c62050e0a4d614ce98b3492f702599"
   # tag "bioinformatics"
   # doi "10.1038/nmeth.3317"
   # tag origin homebrew-science
